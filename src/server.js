@@ -1,9 +1,8 @@
 const http = require('http');
 const url = require('url');
-const query = require('querystring');
+// const query = require('querystring');
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
-const cardHandler = require('./cardResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -24,10 +23,7 @@ const handlePost = (request, response, parsedUrl) => {
     });
 
     request.on('end', () => {
-      const bodyString = Buffer.concat(body).toString();
-      const bodyParams = query.parse(bodyString);
-
-      jsonHandler.addUser(request, res, bodyParams);
+      // jsonHandler.updateTags(request, res, bodyParams);
     });
   }
 };
@@ -36,11 +32,11 @@ const handleGet = (request, response, parsedUrl) => {
   if (parsedUrl.pathname === '/style.css') {
     htmlHandler.getCSS(request, response);
   } else if (parsedUrl.pathname === '/getCard') {
-    jsonHandler.getUsers(request, response);
+    jsonHandler.getCard(request, response);
   } else if (parsedUrl.pathname === '/') {
     htmlHandler.getIndex(request, response);
   } else {
-    jsonHandler.getNotReal(request, response);
+    htmlHandler.getIndex(request, response);
   }
 };
 

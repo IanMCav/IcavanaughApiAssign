@@ -1,33 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Our simple HTTP server</title>
+        <title>Cards N Tags N Memes</title>
         <link rel="stylesheet" type="text/css" href="/style.css">
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+        <script src="./src/cardResponses.js"></script>
         <script type="text/babel">
             const parseJSON = (xhr, content) => {
                 const obj = JSON.parse(xhr.response);
-                console.dir(obj);
-
-                if(obj.message) {
-                    const p = document.createElement('p');
-                    p.textContent = `Message: ${obj.message}`;
-                    content.appendChild(p);
+                
+                if(obj.imageUrl) {
+                    const img = document.createElement("img");
+                    img.setAttribute("src", obj.imageUrl);
+                    content.appendChild(img);
                 }
-
-                if(obj.users) {
-                    const userList = document.createElement('p');
-                    const users = JSON.stringify(obj.users);
-                    userList.textContent = users;
-                    content.appendChild(userList);
-                }
+                
+                let tags = cardHandler.getCardData(obj.name);
+                
+                document.querySelector("#tagsField").setAttribute("value", tags);
             };
 
             const handleResponse = (xhr) => {
                 const content = document.querySelector('#content');
 
-                switch(xhr.status) {
+                /*switch(xhr.status) {
                     case 200:
                         content.innerHTML = `<b>Success</b>`;
                         break;
@@ -49,36 +46,15 @@
                     default:
                         content.innerHTML = `Error code not implemented by client.`;
                         break;
-                }
+                }*/
                 
-                console.log(xhr);
-
-                if(xhr.status !== 304 || xhr.responseType !== 'HEAD') {
+                if(xhr.status === 200 || xhr.status === 201 || xhr.status === 304) {
                     parseJSON(xhr, content);
                 }
             };
 
             const sendPost = (e, tagForm) => {
-                const nameAction = nameForm.getAttribute('action');
-                const nameMethod = nameForm.getAttribute('method');
-
-                const nameField = nameForm.querySelector('#nameField');
-                const ageField = nameForm.querySelector('#ageField');
-
-                const xhr = new XMLHttpRequest();
-                xhr.open(nameMethod, nameAction);
-
-                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-                xhr.setRequestHeader ('Accept', 'application/json');
-
-                xhr.onload = () => handleResponse(xhr);
-
-                const formData = `name=${nameField.value}&age=${ageField.value}`;
-
-                xhr.send(formData);
-
-                e.preventDefault();
-                return false;
+                
             };
 
             const getCard = (e, cardForm) => {
@@ -86,6 +62,9 @@
                 const nameField = document.querySelector("#nameField");
                 
                 const cardName = nameField.value;
+                
+                console.log("got request");
+                console.dir("got request");
 
                 const xhr = new XMLHttpRequest();
                 xhr.open("GET", "https://api.magicthegathering.io/v1/cards");
@@ -107,8 +86,8 @@
                 const setTags = (e) => sendPost(e, tagForm);
                 const getCard = (e) => getCard(e, cardForm);
 
-                nameForm.addEventListener('submit', addUser);
-                userForm.addEventListener('submit', getUsers);
+                tagForm.addEventListener('submit', setTags);
+                cardForm.addEventListener('submit', getCard);
             };
 
             window.onload = init;
@@ -125,11 +104,13 @@
                 <input type="submit" value="Get Card" />
             </form>
             <form id="tagForm" action="/changeTags" method="post">
-                <img id="cardImage" href="" />
+                <img id="cardImage" src="" />
                 <label for="tags">Tags: </label>
                 <input id="tagsField" type="text" name="tags" />
                 <input type="submit" value="Change Tags" />
             </form>
+        </section>
+        <section id="content">
         </section>
     </body>
 </html>
