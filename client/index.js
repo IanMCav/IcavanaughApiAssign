@@ -1,84 +1,74 @@
+//mtgsdkstuff here too
+const mtg = require('mtgsdk');
+
 const parseJSON = (xhr, content) => {
-                const obj = JSON.parse(xhr.response);
-                
-                if(obj.imageUrl) {
-                    const img = document.createElement("img");
-                    img.setAttribute("src", obj.imageUrl);
-                    content.appendChild(img);
-                }
-                
-                let tags = cardHandler.getCardData(obj.name);
-                
-                document.querySelector("#tagsField").setAttribute("value", tags);
-            };
+    //process the tags, get picture
+};
 
-            const handleResponse = (xhr) => {
-                const content = document.querySelector('#content');
+const handleResponse = (xhr) => {
+    const content = document.querySelector('#cardSpot');
 
-                /*switch(xhr.status) {
-                    case 200:
-                        content.innerHTML = `<b>Success</b>`;
-                        break;
-                    case 201:
-                        content.innerHTML = '<b>Create</b>';
-                        break;
-                    case 204:
-                        content.innerHTML = '<b>Updated (No Content)</b>';
-                        break;
-                    case 304:
-                        content.innerHTML = '<b>Not Modified</b>';
-                        return;
-                    case 400:
-                        content.innerHTML = '<b>Bad Request</b>';
-                        break;
-                    case 404:
-                        content.innerHTML = '<b>Not Found</b>';
-                        break;
-                    default:
-                        content.innerHTML = `Error code not implemented by client.`;
-                        break;
-                }*/
-                
-                if(xhr.status === 200 || xhr.status === 201 || xhr.status === 304) {
-                    parseJSON(xhr, content);
-                }
-            };
+    switch(xhr.status) {
+        case 200:
+            content.innerHTML = `<b>Success</b>`;
+            break;
+        case 201:
+            content.innerHTML = '<b>Create</b>';
+            break;
+        case 204:
+            content.innerHTML = '<b>Updated (No Content)</b>';
+            break;
+        case 304:
+            content.innerHTML = '<b>Not Modified</b>';
+            return;
+        case 400:
+            content.innerHTML = '<b>Bad Request</b>';
+            break;
+        case 404:
+            content.innerHTML = '<b>Not Found</b>';
+            break;
+        default:
+            content.innerHTML = `Error code not implemented by client.`;
+            break;
+    }
 
-            const sendPost = (e, tagForm) => {
-                
-            };
+    if(xhr.status === 200 || xhr.status === 201 || xhr.status === 304) {
+        parseJSON(xhr, content);
+    }
+};
 
-            const getCard = (e, cardForm) => {
+const sendPost = (e, tagForm) => {
 
-                const nameField = document.querySelector("#nameField");
-                
-                const cardName = nameField.value;
-                
-                console.log("got request");
-                console.dir("got request");
+};
 
-                const xhr = new XMLHttpRequest();
-                xhr.open("GET", "https://api.magicthegathering.io/v1/cards");
+const getCard = (e, cardForm) => {
 
-                xhr.setRequestHeader('Accept', 'application/json');
+    const nameField = document.querySelector("#nameField");
 
-                xhr.onload = () => handleResponse(xhr);
+    const cardName = nameField.value;
 
-                xhr.send(`name=${cardName}`);
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "getCard");
 
-                e.preventDefault();
-                return false;
-            };
+    xhr.setRequestHeader('Accept', 'application/json');
 
-            const init = () => {
-                const cardForm = document.querySelector('#cardForm');
-                const tagForm = document.querySelector('#tagForm');
+    xhr.onload = () => handleResponse(xhr);
 
-                const getCard = (e) => getCard(e, cardForm);
-                const setTags = (e) => sendPost(e, tagForm);
+    xhr.send(`name=${cardName}`);
 
-                cardForm.addEventListener('submit', getCard);
-                tagForm.addEventListener('submit', setTags);
-            };
+    e.preventDefault();
+    return false;
+};
 
-            window.onload = init;
+const init = () => {
+    const cardForm = document.querySelector('#cardForm');
+    const tagForm = document.querySelector('#tagForm');
+
+    const getCard = (e) => getCard(e, cardForm);
+    const setTags = (e) => sendPost(e, tagForm);
+
+    cardForm.addEventListener('submit', getCard);
+    tagForm.addEventListener('submit', setTags);
+};
+
+window.onload = init;

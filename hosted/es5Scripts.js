@@ -1,25 +1,18 @@
-"use strict";
+'use strict';
+
+//mtgsdkstuff here too
+var mtg = require('mtgsdk');
 
 var parseJSON = function parseJSON(xhr, content) {
-    var obj = JSON.parse(xhr.response);
-
-    if (obj.imageUrl) {
-        var img = document.createElement("img");
-        img.setAttribute("src", obj.imageUrl);
-        content.appendChild(img);
-    }
-
-    var tags = cardHandler.getCardData(obj.name);
-
-    document.querySelector("#tagsField").setAttribute("value", tags);
+    //process the tags, get picture
 };
 
 var handleResponse = function handleResponse(xhr) {
-    var content = document.querySelector('#content');
+    var content = document.querySelector('#cardSpot');
 
-    /*switch(xhr.status) {
+    switch (xhr.status) {
         case 200:
-            content.innerHTML = `<b>Success</b>`;
+            content.innerHTML = '<b>Success</b>';
             break;
         case 201:
             content.innerHTML = '<b>Create</b>';
@@ -37,9 +30,9 @@ var handleResponse = function handleResponse(xhr) {
             content.innerHTML = '<b>Not Found</b>';
             break;
         default:
-            content.innerHTML = `Error code not implemented by client.`;
+            content.innerHTML = 'Error code not implemented by client.';
             break;
-    }*/
+    }
 
     if (xhr.status === 200 || xhr.status === 201 || xhr.status === 304) {
         parseJSON(xhr, content);
@@ -54,11 +47,8 @@ var getCard = function getCard(e, cardForm) {
 
     var cardName = nameField.value;
 
-    console.log("got request");
-    console.dir("got request");
-
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://api.magicthegathering.io/v1/cards");
+    xhr.open("GET", "getCard");
 
     xhr.setRequestHeader('Accept', 'application/json');
 
@@ -66,7 +56,7 @@ var getCard = function getCard(e, cardForm) {
         return handleResponse(xhr);
     };
 
-    xhr.send("name=" + cardName);
+    xhr.send('name=' + cardName);
 
     e.preventDefault();
     return false;

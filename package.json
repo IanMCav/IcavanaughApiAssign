@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "mtgsdk": "^0.3.0"
+  },
   "scripts": {
     "start": "node ./src/server.js",
     "pretest": "eslint ./src --fix",
@@ -12,7 +14,6 @@
     "build": "babel ./client --out-file ./hosted/es5Scripts.js",
     "watch": "babel --watch ./client --out-file ./hosted/es5Scripts.js"
   },
-    
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",

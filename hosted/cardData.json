@@ -1,18 +1,17 @@
 {
     "cardData": {
-        "tagsList": [
-            {"death's shadow" : ["check yourself", "wreck yourself", "small smash", "riskit for the biscuit"]},
-            {"thoughtseize": ["that was a mulligan, right?", "you kept that?", "whoops sorry I think you needed that", "can't let you do that", "you USED to have a hand."]},
-            {"brainstorm" : ["strictly worse ancestral recall", "except when it isn't", "this is bad without fetches", "draw one, kill my next two draws seems dece", "never legal in modern"]},
-            {"true-name nemesis" : ["blue even gets the best creatures in Legacy", "more power than toughness", "small butts"]},
-            {"lightning bolt" : ["#iconic", "#3toface", "#boltyou"]},
-            {"splinter twin" : ["#unbanTrain", "banned in modern", "infinite combos", "oops I win"]},
-            {"tarmogoyf" : ["play card games with $100 bills", "about as green too", "bigger and better than ever?"]},
-            {"naturalize" : ["always nice to have", "the most generic of versions", "break those things"]},
-            {"path to exile" : ["I ramp them?", "why is this good?", "but they get more mana now", "seriously guys why?"]},
-            {"swords to plowshares" : ["they gain life?", "this is worse than ramping them!", "but it'll take longer to kill them", "legacy vs. modern"]},
-            {"eldrazi temple" : ["why this?", "acceleration on one land a turn!", "sic /'em", "it's time to n-n-n-n-n-noodle"]},
-            {"thought-knot seer" : ["wonderful to see you", "it's time to get noodled", "you don't get to keep that it might kill my stuff"]}
-        ]
+        "death's shadow" : ["check yourself", "wreck yourself", "small smash", "riskit for the biscuit"],
+        "thoughtseize": ["that was a mulligan, right?", "you kept that?", "whoops sorry I think you needed that", "can't let you do that", "you USED to have a hand."],
+        "brainstorm" : ["strictly worse ancestral recall", "except when it isn't", "this is bad without fetches", "draw one, kill my next two draws seems dece", "never legal in modern"],
+        "true-name nemesis" : ["blue even gets the best creatures in Legacy", "more power than toughness", "small butts"],
+        "lightning bolt" : ["#iconic", "#3toface", "#boltyou"],
+        "splinter twin" : ["#unbanTrain", "banned in modern", "infinite combos", "oops I win"],
+        "tarmogoyf" : ["play card games with $100 bills", "about as green too", "bigger and better than ever?"],
+        "naturalize" : ["always nice to have", "the most generic of versions", "break those things"],
+        "path to exile" : ["I ramp them?", "why is this good?", "but they get more mana now", "seriously guys why?"],
+        "swords to plowshares" : ["they gain life?", "this is worse than ramping them!", "but it'll take longer to kill them", "legacy vs. modern"],
+        "eldrazi temple" : ["why this?", "acceleration on one land a turn!", "sic /'em", "it's time to n-n-n-n-n-noodle"],
+        "thought-knot seer" : ["wonderful to see you", "it's time to get noodled", "you don't get to keep that it might kill my stuff"],
+        "island" : ["#banIslands", "best basic"]
     }
 }
