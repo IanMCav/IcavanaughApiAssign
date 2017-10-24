@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Cards N Tags N Memes</title>
+        <link rel="stylesheet" type="text/css" href="/style.css">
+
+        <script src="es5Scripts.js"></script>
+    </head>
+    <body>
+        <section id="top">
+            <h3>There's a (Magic) Card for Everything!</h3>
+            <h4>Input a card name to bring up its entry, then tag it!</h4>
+            
+            <form id="cardForm" action="/cards" method="get">
+                <label for="cardName">Card Name:</label>
+                <input id="nameField" type="text" name="cardName"/>
+                <input type="submit" value="Get Card" />
+            </form>
+            <form id="tagForm" action="/changeTags" method="post">
+                <img id="cardImage" src="" />
+                <label for="tags">Tags: </label>
+                <input id="tagsField" type="text" name="tags" />
+                <input type="submit" value="Change Tags" />
+            </form>
+        </section>
+        <section id="content">
+        </section>
+    </body>
+</html>

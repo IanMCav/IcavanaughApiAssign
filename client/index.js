@@ -1,13 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Cards N Tags N Memes</title>
-        <link rel="stylesheet" type="text/css" href="/style.css">
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
-        <script src="./src/cardResponses.js"></script>
-        <script type="text/babel">
-            const parseJSON = (xhr, content) => {
+const parseJSON = (xhr, content) => {
                 const obj = JSON.parse(xhr.response);
                 
                 if(obj.imageUrl) {
@@ -83,34 +74,11 @@
                 const cardForm = document.querySelector('#cardForm');
                 const tagForm = document.querySelector('#tagForm');
 
-                const setTags = (e) => sendPost(e, tagForm);
                 const getCard = (e) => getCard(e, cardForm);
+                const setTags = (e) => sendPost(e, tagForm);
 
-                tagForm.addEventListener('submit', setTags);
                 cardForm.addEventListener('submit', getCard);
+                tagForm.addEventListener('submit', setTags);
             };
 
             window.onload = init;
-        </script>
-    </head>
-    <body>
-        <section id="top">
-            <h3>There's a (Magic) Card for Everything!</h3>
-            <h4>Input a card name to bring up its entry, then tag it!</h4>
-            
-            <form id="cardForm" action="/cards" method="get">
-                <label for="cardName">Card Name:</label>
-                <input id="nameField" type="text" name="cardName"/>
-                <input type="submit" value="Get Card" />
-            </form>
-            <form id="tagForm" action="/changeTags" method="post">
-                <img id="cardImage" src="" />
-                <label for="tags">Tags: </label>
-                <input id="tagsField" type="text" name="tags" />
-                <input type="submit" value="Change Tags" />
-            </form>
-        </section>
-        <section id="content">
-        </section>
-    </body>
-</html>

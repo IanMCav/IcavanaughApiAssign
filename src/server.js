@@ -23,7 +23,7 @@ const handlePost = (request, response, parsedUrl) => {
     });
 
     request.on('end', () => {
-      // jsonHandler.updateTags(request, res, bodyParams);
+       jsonHandler.updateTags(request, res, bodyParams);
     });
   }
 };
