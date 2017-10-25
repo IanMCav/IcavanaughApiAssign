@@ -2,17 +2,15 @@ const parseJSON = (xhr, content) => {
     const obj = JSON.parse(xhr.response);
     console.dir(obj);
     
-    if(obj.tags) {
+    if(obj.cardTags) {
         const tagSpot = document.createElement('p');
-        const tagString = JSON.stringify(obj.tags);
-        tagSpot.textContent = tagString;
+        tagSpot.textContent = obj.cardTags;
         content.appendChild(tagSpot);
     }
 
 };
 
 const handleResponse = (xhr) => {
-    console.log("handle");
     const content = document.querySelector('#cardSpot');
     
     switch(xhr.status) {
@@ -39,7 +37,7 @@ const handleResponse = (xhr) => {
             break;
     }
 
-    if(xhr.request.method === "GET") {
+    if(xhr.status === 200 || xhr.status === 201) {
         parseJSON(xhr, content);
     }
 };
@@ -64,11 +62,11 @@ const sendPost = (e, tagForm) => {
     
 };
 
-const getCard = (e, cardForm) => {
+const reqCard = (e, cardForm) => {
     const cardName = document.querySelector("#nameField").value;
 
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/getCard");
+    xhr.open("GET", `/getCard?cardName=${cardName}`);
 
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Accept', 'application/json');
@@ -77,7 +75,7 @@ const getCard = (e, cardForm) => {
 
     const formData = `cardName=${cardName}`;
     
-    xhr.send(formData);
+    xhr.send();
 
     e.preventDefault();
     return false;
@@ -87,8 +85,8 @@ const init = () => {
     const cardForm = document.querySelector('#cardForm');
     const tagForm = document.querySelector('#tagForm');
 
-    const getCard = (e) => getCard(e, cardForm);
-    const setTags = (e) => sendPost(e, tagForm);
+    const getCard = function(e){reqCard(e, cardForm)};
+    const setTags = function(e){sendPost(e, tagForm)};
 
     cardForm.addEventListener('submit', getCard);
     tagForm.addEventListener('submit', setTags);

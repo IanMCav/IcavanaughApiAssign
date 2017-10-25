@@ -36,7 +36,7 @@ const getCard = (request, response) => {
   let responseJSON = {};
 
   // oh god, javascript
-  // console.log(JSON.parse(JSON.stringify(query.parse(request.url.split("?")[1])))["cardName"]);
+  console.log(JSON.parse(JSON.stringify(query.parse(request.url.split('?')[1]))).cardName);
   const cardName = JSON.parse(JSON.stringify(query.parse(request.url.split('?')[1]))).cardName;
 
   lastCard = cardName;

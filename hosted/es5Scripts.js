@@ -4,16 +4,14 @@ var parseJSON = function parseJSON(xhr, content) {
     var obj = JSON.parse(xhr.response);
     console.dir(obj);
 
-    if (obj.tags) {
+    if (obj.cardTags) {
         var tagSpot = document.createElement('p');
-        var tagString = JSON.stringify(obj.tags);
-        tagSpot.textContent = tagString;
+        tagSpot.textContent = obj.cardTags;
         content.appendChild(tagSpot);
     }
 };
 
 var handleResponse = function handleResponse(xhr) {
-    console.log("handle");
     var content = document.querySelector('#cardSpot');
 
     switch (xhr.status) {
@@ -40,7 +38,7 @@ var handleResponse = function handleResponse(xhr) {
             break;
     }
 
-    if (xhr.request.method === "GET") {
+    if (xhr.status === 200 || xhr.status === 201) {
         parseJSON(xhr, content);
     }
 };
@@ -66,11 +64,11 @@ var sendPost = function sendPost(e, tagForm) {
     return false;
 };
 
-var getCard = function getCard(e, cardForm) {
+var reqCard = function reqCard(e, cardForm) {
     var cardName = document.querySelector("#nameField").value;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "/getCard");
+    xhr.open("GET", '/getCard?cardName=' + cardName);
 
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Accept', 'application/json');
@@ -81,7 +79,7 @@ var getCard = function getCard(e, cardForm) {
 
     var formData = 'cardName=' + cardName;
 
-    xhr.send(formData);
+    xhr.send();
 
     e.preventDefault();
     return false;
@@ -92,10 +90,10 @@ var init = function init() {
     var tagForm = document.querySelector('#tagForm');
 
     var getCard = function getCard(e) {
-        return getCard(e, cardForm);
+        reqCard(e, cardForm);
     };
     var setTags = function setTags(e) {
-        return sendPost(e, tagForm);
+        sendPost(e, tagForm);
     };
 
     cardForm.addEventListener('submit', getCard);
