@@ -10,18 +10,21 @@
         <section id="top">
             <h3>There's a (Magic) Card for Everything!</h3>
             <h4>Input a card name to bring up its entry, then tag it!</h4>
-            
-            <form id="cardForm" action="/cards" method="get">
-                <label for="cardName">Card Name:</label>
+        </section>
+        <section id="main">
+            <form id="cardForm" action="/getCard" method="get">
+                <label for="nameField">Card Name:</label>
                 <input id="nameField" type="text" name="cardName"/>
                 <input type="submit" value="Get Card" />
             </form>
-            <div id="cardSpot"></div>
-            <form id="tagForm" action="/changeTags" method="post">
+            <div id="cardSpot">
+                <p id="changeInCode">Card goes here!</p>
+            </div>
+            <form id="tagForm" action="/addTag" method="post">
                 <img id="cardImage" src="" />
                 <label for="tags">Tags: </label>
                 <input id="tagsField" type="text" name="tags" />
-                <input type="submit" value="Change Tags" />
+                <input type="submit" value="Add tag" />
             </form>
         </section>
     </body>

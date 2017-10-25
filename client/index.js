@@ -1,13 +1,22 @@
-//mtgsdkstuff here too
 const mtg = require('mtgsdk');
 
-const parseJSON = (xhr, content) => {
-    //process the tags, get picture
+const parseJSON = (xhr, content) => {    
+    const obj = JSON.parse(xhr.response);
+    console.dir("inparse");
+    
+    if(obj.tags) {
+        const tagSpot = document.createElement('p');
+        const tagString = JSON.stringify(obj.tags);
+        tagSpot.textContent = tagString;
+        content.appendChild(tagSpot);
+    }
+
 };
 
 const handleResponse = (xhr) => {
+    console.log("handle");
     const content = document.querySelector('#cardSpot');
-
+    
     switch(xhr.status) {
         case 200:
             content.innerHTML = `<b>Success</b>`;
@@ -32,29 +41,26 @@ const handleResponse = (xhr) => {
             break;
     }
 
-    if(xhr.status === 200 || xhr.status === 201 || xhr.status === 304) {
         parseJSON(xhr, content);
-    }
 };
 
 const sendPost = (e, tagForm) => {
-
+    
 };
 
 const getCard = (e, cardForm) => {
-
-    const nameField = document.querySelector("#nameField");
-
-    const cardName = nameField.value;
+    const cardName = document.querySelector("#nameField").value;
 
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "getCard");
+    xhr.open("GET", "/getCard");
 
     xhr.setRequestHeader('Accept', 'application/json');
 
     xhr.onload = () => handleResponse(xhr);
 
-    xhr.send(`name=${cardName}`);
+    const formData = `cardName=${cardName}`;
+    
+    xhr.send(formData);
 
     e.preventDefault();
     return false;

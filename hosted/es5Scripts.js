@@ -1,13 +1,21 @@
 'use strict';
 
-//mtgsdkstuff here too
 var mtg = require('mtgsdk');
 
 var parseJSON = function parseJSON(xhr, content) {
-    //process the tags, get picture
+    var obj = JSON.parse(xhr.response);
+    console.dir("inparse");
+
+    if (obj.tags) {
+        var tagSpot = document.createElement('p');
+        var tagString = JSON.stringify(obj.tags);
+        tagSpot.textContent = tagString;
+        content.appendChild(tagSpot);
+    }
 };
 
 var handleResponse = function handleResponse(xhr) {
+    console.log("handle");
     var content = document.querySelector('#cardSpot');
 
     switch (xhr.status) {
@@ -34,21 +42,16 @@ var handleResponse = function handleResponse(xhr) {
             break;
     }
 
-    if (xhr.status === 200 || xhr.status === 201 || xhr.status === 304) {
-        parseJSON(xhr, content);
-    }
+    parseJSON(xhr, content);
 };
 
 var sendPost = function sendPost(e, tagForm) {};
 
 var getCard = function getCard(e, cardForm) {
-
-    var nameField = document.querySelector("#nameField");
-
-    var cardName = nameField.value;
+    var cardName = document.querySelector("#nameField").value;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", "getCard");
+    xhr.open("GET", "/getCard");
 
     xhr.setRequestHeader('Accept', 'application/json');
 
@@ -56,7 +59,9 @@ var getCard = function getCard(e, cardForm) {
         return handleResponse(xhr);
     };
 
-    xhr.send('name=' + cardName);
+    var formData = 'cardName=' + cardName;
+
+    xhr.send(formData);
 
     e.preventDefault();
     return false;
