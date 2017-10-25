@@ -11,7 +11,7 @@ let lastCard = 'black lotus';
 
 const query = require('querystring');
 
-const cardData = {};
+let cardData = {};
 cardData["death's shadow"] = (new Card("death's shadow", ['check yourself', 'wreck yourself', 'small smash', 'riskit for the biscuit']));
 cardData.thoughtseize = (new Card('thoughtseize', ['that was a mulligan, right?', 'you kept that?', 'whoops sorry I think you needed that', "can't let you do that", 'you USED to have a hand.']));
 cardData.brainstorm = (new Card('brainstorm', ['strictly worse ancestral recall', "except when it isn't", 'this is bad without fetches', 'draw one, kill my next two draws seems dece', 'never legal in modern']));
@@ -65,7 +65,7 @@ const addTag = (request, response, body) => {
   if (cardData[lastCard]) {
     cardData[lastCard].tags.push(body.newTag);
   } else {
-    cardData[lastCard] = new Card(lastCard, body.newTag);
+    cardData[lastCard] = new Card(lastCard, [body.newTag]);
   }
 
   return respondJSON(request, response, 201, responseJSON);
