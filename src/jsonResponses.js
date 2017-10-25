@@ -5,6 +5,10 @@ class Card {
   }
 }
 
+// for posts, store lasted changed card on server
+
+let lastCard = 'black lotus';
+
 const query = require('querystring');
 
 const cardData = {};
@@ -35,6 +39,8 @@ const getCard = (request, response) => {
   // console.log(JSON.parse(JSON.stringify(query.parse(request.url.split("?")[1])))["cardName"]);
   const cardName = JSON.parse(JSON.stringify(query.parse(request.url.split('?')[1]))).cardName;
 
+  lastCard = cardName;
+
 
   if (cardData[cardName]) {
     const cardTags = cardData[cardName].tags;
@@ -46,20 +52,26 @@ const getCard = (request, response) => {
   respondJSON(request, response, 200, responseJSON);
 };
 
-const updateTags = (request, response, body) => {
+const addTag = (request, response, body) => {
   const responseJSON = {
     message: 'Enter a card name',
   };
 
-  if (!body.name) {
+  if (!body.newTag) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
 
-  return respondJSON(request, response, 200, responseJSON);
+  if (cardData[lastCard]) {
+    cardData[lastCard].tags.push(body.newTag);
+  } else {
+    cardData[lastCard] = new Card(lastCard, body.newTag);
+  }
+
+  return respondJSON(request, response, 201, responseJSON);
 };
 
 module.exports = {
   getCard,
-  updateTags,
+  addTag,
 };

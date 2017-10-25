@@ -1,10 +1,8 @@
 'use strict';
 
-var mtg = require('mtgsdk');
-
 var parseJSON = function parseJSON(xhr, content) {
     var obj = JSON.parse(xhr.response);
-    console.dir("inparse");
+    console.dir(obj);
 
     if (obj.tags) {
         var tagSpot = document.createElement('p');
@@ -42,10 +40,31 @@ var handleResponse = function handleResponse(xhr) {
             break;
     }
 
-    parseJSON(xhr, content);
+    if (xhr.request.method === "GET") {
+        parseJSON(xhr, content);
+    }
 };
 
-var sendPost = function sendPost(e, tagForm) {};
+var sendPost = function sendPost(e, tagForm) {
+    var newTag = document.querySelector('#tagsField').value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/addTag");
+
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader('Accept', 'application/json');
+
+    xhr.onload = function () {
+        return handleResponse(xhr);
+    };
+
+    var formData = 'newTag=' + newTag;
+
+    xhr.send(formData);
+
+    e.preventDefault();
+    return false;
+};
 
 var getCard = function getCard(e, cardForm) {
     var cardName = document.querySelector("#nameField").value;
@@ -53,6 +72,7 @@ var getCard = function getCard(e, cardForm) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", "/getCard");
 
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Accept', 'application/json');
 
     xhr.onload = function () {

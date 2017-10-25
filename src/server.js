@@ -7,33 +7,8 @@ const jsonHandler = require('./jsonResponses.js');
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 const handlePost = (request, response, parsedUrl) => {
-  if (parsedUrl.pathname === '/updateTags') {
-    const res = response;
-
-    const body = [];
-
-    request.on('error', (err) => {
-      console.dir(err);
-      res.statusCode = 400;
-      res.end();
-    });
-
-    request.on('data', (chunk) => {
-      body.push(chunk);
-    });
-
-    request.on('end', () => {
-      // jsonHandler.updateTags(request, res, bodyParams);
-    });
-  }
-};
-
-const handleGet = (request, response, parsedUrl) => {
   console.log(parsedUrl.pathname);
-
-  if (parsedUrl.pathname === '/style.css') {
-    htmlHandler.getCSS(request, response);
-  } else if (parsedUrl.pathname === '/getCard') {
+  if (parsedUrl.pathname === '/addTag') {
     const res = response;
 
     const body = [];
@@ -52,8 +27,19 @@ const handleGet = (request, response, parsedUrl) => {
       const bodyString = Buffer.concat(body).toString();
       const bodyParams = query.parse(bodyString);
 
-      jsonHandler.getCard(request, response, bodyParams);
+      jsonHandler.addTag(request, res, bodyParams);
     });
+  }
+};
+
+const handleGet = (request, response, parsedUrl) => {
+  console.log(parsedUrl.pathname);
+  const res = response;
+
+  if (parsedUrl.pathname === '/style.css') {
+    htmlHandler.getCSS(request, response);
+  } else if (parsedUrl.pathname === '/getCard') {
+    jsonHandler.getCard(request, res);
   } else if (parsedUrl.pathname === '/es5Scripts.js') {
     htmlHandler.getBundle(request, response);
   } else if (parsedUrl.pathname === '/') {

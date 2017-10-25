@@ -1,8 +1,6 @@
-const mtg = require('mtgsdk');
-
 const parseJSON = (xhr, content) => {    
     const obj = JSON.parse(xhr.response);
-    console.dir("inparse");
+    console.dir(obj);
     
     if(obj.tags) {
         const tagSpot = document.createElement('p');
@@ -41,10 +39,28 @@ const handleResponse = (xhr) => {
             break;
     }
 
+    if(xhr.request.method === "GET") {
         parseJSON(xhr, content);
+    }
 };
 
 const sendPost = (e, tagForm) => {
+    const newTag = document.querySelector('#tagsField').value;
+    
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/addTag");
+    
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.setRequestHeader ('Accept', 'application/json');
+
+    xhr.onload = () => handleResponse(xhr);
+    
+    const formData = `newTag=${newTag}`;
+    
+    xhr.send(formData);
+    
+    e.preventDefault();
+    return false;
     
 };
 
@@ -54,6 +70,7 @@ const getCard = (e, cardForm) => {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "/getCard");
 
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Accept', 'application/json');
 
     xhr.onload = () => handleResponse(xhr);
