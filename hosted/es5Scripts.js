@@ -1,6 +1,6 @@
 "use strict";
 
-//global content value because of GETS being a pair of asyncronous calls
+//global content value because of GETS being a pair of asynchronous calls
 var contentText = "";
 
 //takes the results and puts them on the page.
@@ -53,30 +53,34 @@ var parseJSON = function parseJSON(xhr) {
 //deal with errors and the responses.
 var handleResponse = function handleResponse(xhr) {
     var content = document.querySelector('#cardSpot');
+    var statusMessage = "";
 
     switch (xhr.status) {
         case 200:
-            content.innerHTML = "<b>Success</b>";
+            statusMessage = "<p class=\"success\"><b>Success</b></p>";
             break;
         case 201:
-            content.innerHTML = '<b>Create</b>';
+            statusMessage = '<p class="success"><b>Create</b></p>';
             break;
         case 204:
-            content.innerHTML = '<b>Updated (No Content)</b>';
+            statusMessage = '<p class="success"><b>Updated (No Content)</b></p>';
             break;
         case 304:
-            content.innerHTML = '<b>Not Modified</b>';
+            statusMessage = '<p class="neutral"><b>Not Modified</b></p>';
             return;
         case 400:
-            content.innerHTML = '<b>Bad Request</b>';
+            statusMessage = '<p class="error"><b>Bad Request</b></p>';
             break;
         case 404:
-            content.innerHTML = '<b>Not Found</b>';
+            statusMessage = '<p class="error"><b>Not Found</b></p>';
             break;
         default:
-            content.innerHTML = "Error code not implemented by client.";
+            statusMessage = "<p class=\"error\"><b>Error code not implemented by client.</b></p>";
             break;
     }
+
+    contentText += statusMessage;
+    content.innerHTML = contentText;
 
     if (xhr.status === 200 || xhr.status === 201) {
         parseJSON(xhr);

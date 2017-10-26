@@ -1,9 +1,9 @@
 const query = require('querystring');
 
-//for POSTs, store the last card searched for.
+// for POSTs, store the last card searched for.
 let lastCard = 'black lotus';
 
-//tag data.
+// tag data.
 const cardTags = {};
 cardTags["death's shadow"] = ['check yourself', 'wreck yourself', 'small smash', 'riskit for the biscuit'];
 cardTags.thoughtseize = ['that was a mulligan, right?', 'you kept that?', 'whoops sorry I think you needed that', "can't let you do that", 'you USED to have a hand.'];
@@ -23,14 +23,15 @@ cardTags.griselbrand = ["heeeere's grizzledaddy"];
 cardTags['mother of runes'] = ['hi mom'];
 cardTags['ulamog, the ceaseless hunger'] = ['om nom nom nom'];
 
-//fill in JSON response with the object being returned.
+// fill in JSON response with the object being returned.
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
   response.write(JSON.stringify(object));
   response.end();
 };
 
-//get tag data for a user input card.
+
+// get tag data for a user input card.
 const getCard = (request, response) => {
   let responseJSON = {};
 
@@ -45,12 +46,12 @@ const getCard = (request, response) => {
     resMess = cardTags[cardName];
   }
 
-  responseJSON = { id: cardName, message: resMess};
+  responseJSON = { id: cardName, message: resMess };
 
   respondJSON(request, response, 200, responseJSON);
 };
 
-//add a new tag
+// add a new tag
 const addTag = (request, response, body) => {
   const responseJSON = {
   };
@@ -64,13 +65,13 @@ const addTag = (request, response, body) => {
   if (cardTags[lastCard]) {
     cardTags[lastCard].push(body.newTag);
   } else {
-    cardTags[lastCard] = [ body.newTag ];
+    cardTags[lastCard] = [body.newTag];
   }
 
   return respondJSON(request, response, 201, responseJSON);
 };
 
-//export the functions
+// export the functions
 module.exports = {
   getCard,
   addTag,
