@@ -45,7 +45,7 @@ const getCard = (request, response) => {
   const cardName = JSON.parse(JSON.stringify(query.parse(request.url.split('?')[1]))).cardName;
 
   lastCard = cardName;
-  let resMess = 'No tags for this card yet!';
+  let resMess = 'This card has no tags... :(';
 
   if (cardTags[cardName]) {
     resMess = cardTags[cardName].tags;
@@ -58,11 +58,11 @@ const getCard = (request, response) => {
 
 const addTag = (request, response, body) => {
   const responseJSON = {
-    message: 'Enter a card name',
   };
 
   if (!body.newTag) {
     responseJSON.id = 'missingParams';
+      responseJSON.message = "Enter a tag!"
     return respondJSON(request, response, 400, responseJSON);
   }
 

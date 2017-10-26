@@ -1,18 +1,44 @@
-const parseJSON = (xhr, content) => {    
+let contentText = "";
+
+const parseJSON = (xhr) => {    
+
+    const content = document.querySelector('#cardSpot');
+
     const obj = JSON.parse(xhr.response);
     console.dir(obj);
     
+    if(obj.id) {
+        contentText += `<h3>${obj.id}</h3>`;
+    }
+    
+    
     if(obj.message) {
-        const tagSpot = document.createElement('p');
-        tagSpot.textContent = obj.cardTags;
-        content.appendChild(tagSpot);
+        
+        let messageString = "";
+        
+        for(var i = 0; i < obj.message.length; i++) {
+            messageString += `<p>${obj.message[i]}</p>`;
+        }
+        
+        contentText += messageString;
     }
     
     if(obj.cards) {
-        const imageSpot = document.createElement('img');
-        imageSpot.src = obj.cards[0].imageUrl;
-        content.appendChild(imageSpot);
+        let imageUrl;
+        let curInd = 0;
+        
+        //find the first returned card with a gatherer image
+        while(!imageUrl) {
+            if(obj.cards[curInd].imageUrl) {
+                imageUrl = obj.cards[curInd].imageUrl;
+            } else {
+                curInd++;
+            }
+        }
+        contentText += `<img src=${imageUrl}>`;
     }
+    
+    content.innerHTML = contentText;
 
 };
 
@@ -44,7 +70,7 @@ const handleResponse = (xhr) => {
     }
 
     if(xhr.status === 200 || xhr.status === 201) {
-        parseJSON(xhr, content);
+        parseJSON(xhr);
     }
 };
 
@@ -69,10 +95,12 @@ const sendPost = (e, tagForm) => {
 };
 
 const reqCard = (e, cardForm) => {
+    contentText = "";
+    
     const cardName = document.querySelector("#nameField").value;
 
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", `/getCard?cardName=${cardName}`);
+    xhr.open("GET", `/getCard?cardName=${cardName.toLowerCase()}`);
 
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Accept', 'application/json');

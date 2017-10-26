@@ -1,20 +1,45 @@
-'use strict';
+"use strict";
 
-var parseJSON = function parseJSON(xhr, content) {
+var contentText = "";
+
+var parseJSON = function parseJSON(xhr) {
+
+    var content = document.querySelector('#cardSpot');
+
     var obj = JSON.parse(xhr.response);
     console.dir(obj);
 
+    if (obj.id) {
+        contentText += "<h3>" + obj.id + "</h3>";
+    }
+
     if (obj.message) {
-        var tagSpot = document.createElement('p');
-        tagSpot.textContent = obj.cardTags;
-        content.appendChild(tagSpot);
+
+        var messageString = "";
+
+        for (var i = 0; i < obj.message.length; i++) {
+            messageString += "<p>" + obj.message[i] + "</p>";
+        }
+
+        contentText += messageString;
     }
 
     if (obj.cards) {
-        var imageSpot = document.createElement('img');
-        imageSpot.src = obj.cards[0].imageUrl;
-        content.appendChild(imageSpot);
+        var imageUrl = void 0;
+        var curInd = 0;
+
+        //find the first returned card with a gatherer image
+        while (!imageUrl) {
+            if (obj.cards[curInd].imageUrl) {
+                imageUrl = obj.cards[curInd].imageUrl;
+            } else {
+                curInd++;
+            }
+        }
+        contentText += "<img src=" + imageUrl + ">";
     }
+
+    content.innerHTML = contentText;
 };
 
 var handleResponse = function handleResponse(xhr) {
@@ -22,7 +47,7 @@ var handleResponse = function handleResponse(xhr) {
 
     switch (xhr.status) {
         case 200:
-            content.innerHTML = '<b>Success</b>';
+            content.innerHTML = "<b>Success</b>";
             break;
         case 201:
             content.innerHTML = '<b>Create</b>';
@@ -40,12 +65,12 @@ var handleResponse = function handleResponse(xhr) {
             content.innerHTML = '<b>Not Found</b>';
             break;
         default:
-            content.innerHTML = 'Error code not implemented by client.';
+            content.innerHTML = "Error code not implemented by client.";
             break;
     }
 
     if (xhr.status === 200 || xhr.status === 201) {
-        parseJSON(xhr, content);
+        parseJSON(xhr);
     }
 };
 
@@ -62,7 +87,7 @@ var sendPost = function sendPost(e, tagForm) {
         return handleResponse(xhr);
     };
 
-    var formData = 'newTag=' + newTag;
+    var formData = "newTag=" + newTag;
 
     xhr.send(formData);
 
@@ -71,10 +96,12 @@ var sendPost = function sendPost(e, tagForm) {
 };
 
 var reqCard = function reqCard(e, cardForm) {
+    contentText = "";
+
     var cardName = document.querySelector("#nameField").value;
 
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", '/getCard?cardName=' + cardName);
+    xhr.open("GET", "/getCard?cardName=" + cardName.toLowerCase());
 
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.setRequestHeader('Accept', 'application/json');
@@ -96,7 +123,7 @@ var init = function init() {
     var getCard = function getCard(e) {
         reqCard(e, cardForm);
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", 'https://api.magicthegathering.io/v1/cards?name=' + document.querySelector("#nameField").value);
+        xhr.open("GET", "https://api.magicthegathering.io/v1/cards?name=" + document.querySelector("#nameField").value);
 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.setRequestHeader('Accept', 'application/json');
