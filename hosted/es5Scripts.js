@@ -4,10 +4,16 @@ var parseJSON = function parseJSON(xhr, content) {
     var obj = JSON.parse(xhr.response);
     console.dir(obj);
 
-    if (obj.cardTags) {
+    if (obj.message) {
         var tagSpot = document.createElement('p');
         tagSpot.textContent = obj.cardTags;
         content.appendChild(tagSpot);
+    }
+
+    if (obj.cards) {
+        var imageSpot = document.createElement('img');
+        imageSpot.src = obj.cards[0].imageUrl;
+        content.appendChild(imageSpot);
     }
 };
 
@@ -77,8 +83,6 @@ var reqCard = function reqCard(e, cardForm) {
         return handleResponse(xhr);
     };
 
-    var formData = 'cardName=' + cardName;
-
     xhr.send();
 
     e.preventDefault();
@@ -91,6 +95,20 @@ var init = function init() {
 
     var getCard = function getCard(e) {
         reqCard(e, cardForm);
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", 'https://api.magicthegathering.io/v1/cards?name=' + document.querySelector("#nameField").value);
+
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Accept', 'application/json');
+
+        xhr.onload = function () {
+            return handleResponse(xhr);
+        };
+
+        xhr.send();
+
+        e.preventDefault();
+        return false;
     };
     var setTags = function setTags(e) {
         sendPost(e, tagForm);

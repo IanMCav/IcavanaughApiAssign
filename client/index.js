@@ -2,10 +2,16 @@ const parseJSON = (xhr, content) => {
     const obj = JSON.parse(xhr.response);
     console.dir(obj);
     
-    if(obj.cardTags) {
+    if(obj.message) {
         const tagSpot = document.createElement('p');
         tagSpot.textContent = obj.cardTags;
         content.appendChild(tagSpot);
+    }
+    
+    if(obj.cards) {
+        const imageSpot = document.createElement('img');
+        imageSpot.src = obj.cards[0].imageUrl;
+        content.appendChild(imageSpot);
     }
 
 };
@@ -73,8 +79,6 @@ const reqCard = (e, cardForm) => {
 
     xhr.onload = () => handleResponse(xhr);
 
-    const formData = `cardName=${cardName}`;
-    
     xhr.send();
 
     e.preventDefault();
@@ -85,7 +89,21 @@ const init = () => {
     const cardForm = document.querySelector('#cardForm');
     const tagForm = document.querySelector('#tagForm');
 
-    const getCard = function(e){reqCard(e, cardForm)};
+    const getCard = function(e){
+        reqCard(e, cardForm);
+        const xhr = new XMLHttpRequest();
+        xhr.open("GET", `https://api.magicthegathering.io/v1/cards?name=${document.querySelector("#nameField").value}`);
+
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.setRequestHeader('Accept', 'application/json');
+
+        xhr.onload = () => handleResponse(xhr);
+
+        xhr.send();
+
+        e.preventDefault();
+        return false;
+    };
     const setTags = function(e){sendPost(e, tagForm)};
 
     cardForm.addEventListener('submit', getCard);
