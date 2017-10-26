@@ -3,7 +3,10 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
-    background-color: lightblue;
+    color: #CCCCC8;
+    background: #7DD9FF;
+    background: linear-gradient(#000000, #3A427F);
+    text-align: center;
 }
 
 #top {

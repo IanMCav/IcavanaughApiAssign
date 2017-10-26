@@ -17,10 +17,13 @@ var parseJSON = function parseJSON(xhr) {
 
         var messageString = "";
 
-        for (var i = 0; i < obj.message.length; i++) {
-            messageString += "<p>" + obj.message[i] + "</p>";
+        if (obj.message != "This card has no tags... :(") {
+            for (var i = 0; i < obj.message.length; i++) {
+                messageString += "<p>" + obj.message[i] + "</p>";
+            }
+        } else {
+            messageString += "<p>" + obj.message + "</p>";
         }
-
         contentText += messageString;
     }
 
@@ -123,7 +126,7 @@ var init = function init() {
     var getCard = function getCard(e) {
         reqCard(e, cardForm);
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://api.magicthegathering.io/v1/cards?name=" + document.querySelector("#nameField").value);
+        xhr.open("GET", "https://api.magicthegathering.io/v1/cards?name=\"" + document.querySelector("#nameField").value + "\"");
 
         xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
         xhr.setRequestHeader('Accept', 'application/json');
