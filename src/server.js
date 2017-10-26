@@ -6,6 +6,7 @@ const jsonHandler = require('./jsonResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
+//deal with POST requests.
 const handlePost = (request, response, parsedUrl) => {
   console.log(parsedUrl.pathname);
   if (parsedUrl.pathname === '/addTag') {
@@ -32,6 +33,7 @@ const handlePost = (request, response, parsedUrl) => {
   }
 };
 
+//deal with GET requests
 const handleGet = (request, response, parsedUrl) => {
   console.log(parsedUrl.pathname);
   const res = response;
@@ -49,7 +51,7 @@ const handleGet = (request, response, parsedUrl) => {
   }
 };
 
-
+//figure out what kind of request we're dealing with
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 

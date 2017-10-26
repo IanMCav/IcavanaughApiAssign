@@ -1,19 +1,19 @@
+//global content value because of GETS being a pair of asyncronous calls
 let contentText = "";
 
-const parseJSON = (xhr) => {    
-
+//takes the results and puts them on the page.
+const parseJSON = (xhr) => {
     const content = document.querySelector('#cardSpot');
 
     const obj = JSON.parse(xhr.response);
-    console.dir(obj);
     
+    //id is used to store the card name when things go correctly, and error types otherwise
     if(obj.id) {
         contentText += `<h3>${obj.id}</h3>`;
     }
     
-    
+    //message is used to store the card's tags if any
     if(obj.message) {
-        
         let messageString = "";
         
         if(obj.message != "This card has no tags... :(") {
@@ -26,6 +26,9 @@ const parseJSON = (xhr) => {
         contentText += messageString;
     }
     
+    //cards is where the mtgapi returns its results. Different printings each have their own entry
+    //and some promo arts don't have images on the gatherer, so I have to loop through the list
+    //until I find one an image.
     if(obj.cards) {
         let imageUrl;
         let curInd = 0;
@@ -38,6 +41,7 @@ const parseJSON = (xhr) => {
                 curInd++;
             }
         }
+        
         contentText += `<img src=${imageUrl}>`;
     }
     
@@ -45,6 +49,7 @@ const parseJSON = (xhr) => {
 
 };
 
+//deal with errors and the responses.
 const handleResponse = (xhr) => {
     const content = document.querySelector('#cardSpot');
     
@@ -77,6 +82,7 @@ const handleResponse = (xhr) => {
     }
 };
 
+//add a new tag
 const sendPost = (e, tagForm) => {
     const newTag = document.querySelector('#tagsField').value;
     
@@ -97,6 +103,7 @@ const sendPost = (e, tagForm) => {
     
 };
 
+//get a card's tags
 const reqCard = (e, cardForm) => {
     contentText = "";
     
@@ -116,12 +123,17 @@ const reqCard = (e, cardForm) => {
     return false;
 };
 
+//set up form submission buttons
 const init = () => {
     const cardForm = document.querySelector('#cardForm');
     const tagForm = document.querySelector('#tagForm');
 
     const getCard = function(e){
+        //get the card's tags, which are stored on the local server.
         reqCard(e, cardForm);
+        
+        //get card metadata from the mtgapi, which an asyncronous call
+        //found from https://docs.magicthegathering.io/
         const xhr = new XMLHttpRequest();
         xhr.open("GET", `https://api.magicthegathering.io/v1/cards?name=\"${document.querySelector("#nameField").value}\"`);
 
